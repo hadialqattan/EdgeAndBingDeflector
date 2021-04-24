@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017–2021 Daniel Aleksandersen
+ * Copyright © 2021–present Hadi Alqattan
  * SPDX-License-Identifier: MIT
  * License-Filename: LICENSE
  */
@@ -58,6 +59,7 @@ namespace EdgeDeflector
 
         static string RewriteMsEdgeUriSchema(string uri)
         {
+            string search_engine_name = "Google";  // WIP, hardcoded.
             string msedge_protocol_pattern = "^microsoft-edge:/*";
 
             Regex rgx = new Regex(msedge_protocol_pattern);
@@ -65,7 +67,7 @@ namespace EdgeDeflector
 
             if (IsHttpUri(new_uri))
             {
-                return new_uri;
+                return ReplaceSearchEngine(new_uri, search_engine_name);
             }
 
             // May be new-style Cortana URI - try and split out
@@ -75,12 +77,35 @@ namespace EdgeDeflector
                 if (IsHttpUri(cortanaUri))
                 {
                     // Correctly form the new URI before returning
-                    return cortanaUri;
+                    return ReplaceSearchEngine(cortanaUri, search_engine_name);
                 }
             }
 
             // defer fallback to web browser
-            return "http://" + new_uri;
+            return "http://" + ReplaceSearchEngine(new_uri, search_engine_name);
+        }
+
+        static string ReplaceQuery(string uri, string newQuery)
+        {
+            return uri.Replace("bing.com/search?q=", newQuery);
+        }
+
+        static string ReplaceSearchEngine(string uri, string searchEngineName)
+        {
+            int index = uri.IndexOf("&");
+            if (index > 0) { 
+                uri = uri.Substring(0, index); 
+            }
+
+            switch (searchEngineName)
+            {
+                case "Google":  // Hardcoded on `RewriteMsEdgeUriSchema`.
+                    return ReplaceQuery(uri, "google.com/search?q=");
+                case "DuckDuckGo":  // WIP.
+                    return ReplaceQuery(uri, "duckduckgo.com/?q=");
+                default:
+                    return uri;
+            }
         }
 
         static void OpenUri(string uri)
