@@ -1,6 +1,6 @@
 # EdgeAndBingDeflector
 
-> upstream repository: [EdgeDeflector](https://github.com/da2x/EdgeDeflector).
+> Original repository: [EdgeDeflector](https://github.com/da2x/EdgeDeflector) (no upstream relationship).
 
 *EdgeAndBingDeflector* is  a small helper application that intercepts URIs that force-open web links in Microsoft Edge and redirects it to the system’s default web browser, along with changing the search engine to Google. This allows you to use Windows features like the Cortana assistant and built-in help links with the browser of your choice instead of being forced to use Microsoft Edge. With EdgeAndBingDeflector, you’re free to use Firefox, Google Chrome, or whatever your favorite web browser with Google search engine!
 
